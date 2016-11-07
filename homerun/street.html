@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script type='text/javascript' src='funcs.js'></script>
+    <title>HomeRun</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #street-view {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="street-view"></div>
+    <script>
+      var panorama;
+      var homeLat = localStorage.getItem("homeLat");
+      var homeLng = localStorage.getItem("homeLng");
+      function initialize() {
+          checkStreetview();
+          panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('street-view'),
+            {
+              position: {lat: homeLat, lng: homeLng},
+              pov: {heading: 165, pitch: 0},
+              zoom: 1
+            });
+      }
+      function checkStreetview() {
+          var streetViewService = new google.maps.StreetViewService();
+          var STREETVIEW_MAX_DISTANCE = 100;
+          alert(typeof(parseFloat(homeLat)));
+          var latLng = new google.maps.LatLng(parseFloat(homeLat), parseFloat(homeLng));
+          streetViewService.getPanoramaByLocation(latLng, STREETVIEW_MAX_DISTANCE, function (streetViewPanoramaData, status) {
+              if (status === google.maps.StreetViewStatus.OK) {
+                  alert('ok');
+            } else {
+                  alert('no street view');
+            }
+          });
+      }
+    </script>
+    <script async defer
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-4_JKDJrX5Ub1VkFIfcKGloDEpKae5lY&callback=initialize">
+    </script>
+  </body>
+</html>
