@@ -54,14 +54,47 @@
       var markersArray = [];
 
       function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
-        });
-        google.maps.event.addListener(map, 'click', function(e) {
-            placeMarker(e.latLng, map);
-        });
+          var uluru = {lat: -25.363, lng: 131.044};
+          var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 4,
+              center: uluru
+          });
+          var back = localStorage.getItem("back");
+          if (back === "back") {
+              clearOverlays();
+              homeLat = localStorage.getItem("homeLat");
+              homeLng = localStorage.getItem("homeLng");
+              destLat = localStorage.getItem("destLat");
+              destLng = localStorage.getItem("destLng");
+              var latLngHome  = new google.maps.LatLng(parseFloat(homeLat), parseFloat(homeLng));
+              var latLngGuess = new google.maps.LatLng(destLat, destLng);
+              var markerHome = new google.maps.Marker({
+                  position: latLngHome,
+                  label: "home"
+              });
+              var markerGuess = new google.maps.Marker({
+                  position: latLngGuess,
+                  label: "guess"
+              });
+              markersArray.push(markerHome);
+              markersArray.push(markerGuess);
+              drawMarkers(map);
+              var pathLine = [latLngHome, latLngGuess]
+              var path = new google.maps.Polyline({
+                  path: pathLine,
+                  geodesic: true,
+                  strokeColor: '#FF0000',
+                  strokeOpacity: 1.0,
+                  strokeWeight: 2
+              });
+
+              path.setMap(map);
+              map.panTo(latLngGuess);
+          }
+          localStorage.setItem("back", "nope");
+          google.maps.event.addListener(map, 'click', function(e) {
+              placeMarker(e.latLng, map);
+          });
       }
 
       function placeMarker(position, map) {
@@ -73,6 +106,12 @@
           setLatLng(marker.getPosition().lat(), marker.getPosition().lng());
           markersArray.push(marker);
           map.panTo(position);
+      }
+
+      function drawMarkers(map) {
+          for (var i = 0; i < markersArray.length; i++ ) {
+              markersArray[i].setMap(map);
+          }
       }
 
       function clearOverlays() {
