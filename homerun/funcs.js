@@ -6,3 +6,7 @@ function setLatLng(lat, lng) {
 function loadStreet() {
     window.location.href = "street.html";
 }
+
+function loadMap() {
+    window.location.href = "map.html";
+}

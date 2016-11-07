@@ -2,6 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type='text/javascript' src='funcs.js'></script>
     <title>HomeRun</title>
     <style>
@@ -11,36 +20,59 @@
         padding: 0;
       }
       #street-view {
-        height: 100%;
+        height: 90%;
+      }
+      #btn {
+          margin-top: 1%;
+          width: 20%;
       }
     </style>
   </head>
   <body>
     <div id="street-view"></div>
+    <div class="col-md-12 text-center">
+        <button type="button" class="btn btn-primary" id="btn" onClick="done()">I'm Home</button>
+    </div>
     <script>
-      var panorama;
       var homeLat = localStorage.getItem("homeLat");
       var homeLng = localStorage.getItem("homeLng");
+      var destLat = 0;
+      var destLng = 0;
+      var oneKm   = 0.009000009;
+
       function initialize() {
           checkStreetview();
-          panorama = new google.maps.StreetViewPanorama(
+          var panorama = new google.maps.StreetViewPanorama(
             document.getElementById('street-view'),
             {
-              position: {lat: homeLat, lng: homeLng},
+              position: {lat: parseFloat(homeLat)+oneKm, lng: parseFloat(homeLng)+oneKm},
               pov: {heading: 165, pitch: 0},
               zoom: 1
             });
+            panorama.addListener('position_changed', function() {
+                destLat = panorama.getPosition().lat();
+                destLng = panorama.getPosition().lng();
+            });
+      }
+
+      function done(){
+          localStorage.setItem("homeLng", homeLng);
+          localStorage.setItem("destLat", homeLat);
+          localStorage.setItem("destLng", destLng);
+          localStorage.setItem("homeLat", destLat);
+          localStorage.setItem("back", "back");
+          loadMap();
       }
       function checkStreetview() {
           var streetViewService = new google.maps.StreetViewService();
           var STREETVIEW_MAX_DISTANCE = 100;
-          alert(typeof(parseFloat(homeLat)));
           var latLng = new google.maps.LatLng(parseFloat(homeLat), parseFloat(homeLng));
           streetViewService.getPanoramaByLocation(latLng, STREETVIEW_MAX_DISTANCE, function (streetViewPanoramaData, status) {
               if (status === google.maps.StreetViewStatus.OK) {
-                  alert('ok');
+                  // everything's fine
             } else {
-                  alert('no street view');
+                  alert('There is no StreetView available in this area...');
+                  window.location.href = "map.html";
             }
           });
       }
