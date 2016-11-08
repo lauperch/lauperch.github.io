@@ -66,7 +66,7 @@
               destLat = localStorage.getItem("destLat");
               destLng = localStorage.getItem("destLng");
               var latLngHome  = new google.maps.LatLng(parseFloat(homeLat), parseFloat(homeLng));
-              var latLngGuess = new google.maps.LatLng(destLat, destLng);
+              var latLngGuess = new google.maps.LatLng(parseFloat(destLat), parseFloat(destLng));
               var markerHome = new google.maps.Marker({
                   position: latLngHome,
                   label: "home"
@@ -123,7 +123,7 @@
 
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-4_JKDJrX5Ub1VkFIfcKGloDEpKae5lY&callback=initMap&sensor=false">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-4_JKDJrX5Ub1VkFIfcKGloDEpKae5lY&callback=initMap">
     </script>
   </body>
 </html>

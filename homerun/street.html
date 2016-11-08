@@ -47,7 +47,8 @@
             {
               position: {lat: parseFloat(homeLat)+0.5*oneKm, lng: parseFloat(homeLng)+0.5*oneKm},
               pov: {heading: 165, pitch: 0},
-              zoom: 1
+              zoom: 1,
+              sensor: false
             });
             panorama.addListener('position_changed', function() {
                 destLat = panorama.getPosition().lat();
@@ -56,16 +57,14 @@
       }
 
       function done(){
-          localStorage.setItem("homeLng", homeLng);
-          localStorage.setItem("destLat", homeLat);
+          localStorage.setItem("destLat", destLat);
           localStorage.setItem("destLng", destLng);
-          localStorage.setItem("homeLat", destLat);
           localStorage.setItem("back", "back");
           loadMap();
       }
       function checkStreetview() {
           var streetViewService = new google.maps.StreetViewService();
-          var STREETVIEW_MAX_DISTANCE = 100;
+          var STREETVIEW_MAX_DISTANCE = 20;
           var latLng = new google.maps.LatLng(parseFloat(homeLat), parseFloat(homeLng));
           streetViewService.getPanoramaByLocation(latLng, STREETVIEW_MAX_DISTANCE, function (streetViewPanoramaData, status) {
               if (status === google.maps.StreetViewStatus.OK) {
