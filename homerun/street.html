@@ -48,7 +48,7 @@
               position: {lat: parseFloat(homeLat)+0.5*oneKm, lng: parseFloat(homeLng)+0.5*oneKm},
               pov: {heading: 165, pitch: 0},
               zoom: 1,
-              sensor: false
+              
             });
             panorama.addListener('position_changed', function() {
                 destLat = panorama.getPosition().lat();

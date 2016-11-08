@@ -51,6 +51,7 @@
     </div>
     <script>
       var markersArray = [];
+      var pathsArray   = [];
 
       function initMap() {
           var uluru = {lat: -25.363, lng: 131.044};
@@ -86,6 +87,7 @@
                   strokeOpacity: 1.0,
                   strokeWeight: 2
               });
+              pathsArray.push(path);
 
               path.setMap(map);
               map.setZoom(17);
@@ -118,6 +120,10 @@
           for (var i = 0; i < markersArray.length; i++ ) {
               markersArray[i].setMap(null);
           }
+          for (var i=0; i < pathsArray.length; i++) {
+              pathsArray[i].setMap(null);
+          }
+          pathsArray.length   = 0;
           markersArray.length = 0;
       }
 
