@@ -45,7 +45,7 @@
           var panorama = new google.maps.StreetViewPanorama(
             document.getElementById('street-view'),
             {
-              position: {lat: parseFloat(homeLat)+oneKm, lng: parseFloat(homeLng)+oneKm},
+              position: {lat: parseFloat(homeLat)+0.5*oneKm, lng: parseFloat(homeLng)+0.5*oneKm},
               pov: {heading: 165, pitch: 0},
               zoom: 1
             });
@@ -68,6 +68,15 @@
           var STREETVIEW_MAX_DISTANCE = 100;
           var latLng = new google.maps.LatLng(parseFloat(homeLat), parseFloat(homeLng));
           streetViewService.getPanoramaByLocation(latLng, STREETVIEW_MAX_DISTANCE, function (streetViewPanoramaData, status) {
+              if (status === google.maps.StreetViewStatus.OK) {
+                  // everything's fine
+            } else {
+                  alert('There is no StreetView available in this area...');
+                  window.location.href = "map.html";
+            }
+          });
+          var latLngNew = new google.maps.LatLng(parseFloat(homeLat)+0.5*oneKm, parseFloat(homeLng)+0.5*oneKm);
+          streetViewService.getPanoramaByLocation(latLngNew, STREETVIEW_MAX_DISTANCE, function (streetViewPanoramaData, status) {
               if (status === google.maps.StreetViewStatus.OK) {
                   // everything's fine
             } else {
